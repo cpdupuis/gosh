@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strconv"
 	"io"
 	"os"
@@ -102,12 +103,15 @@ func repl(treeCh chan Value) {
 
 func treeizeHelper(inCh chan string, curr Value) Value {
 	next := <- inCh
-	val,err := strconv.ParseInt(next, 10, 64)
+	intVal,err := strconv.ParseInt(next, 10, 64)
 	if err == nil {
 		// It's an int!
-		return &Int{Number: val}
+		return &Int{Number: intVal}
 	}
-
+	match, err := regexp.MatchString("^\".*\"$", next)
+	if match {
+		return &String{Str: strings.Trim(next, "\"")}
+	}
 	return Nil
 }
 
