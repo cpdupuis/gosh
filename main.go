@@ -24,9 +24,15 @@ const (
 	Quit
 )
 
-func readEval(interp *Interpreter) (Value, CommandStatus) {
+// Return the next complete parseable chunk.
+func read(interp *Interpreter) (string, CommandStatus) {
+	fmt.Printf("$ ")
 	val, _ := interp.Reader.ReadString('\n')
-	cmd := strings.TrimRight(val, "\r\n")
+	chunk := strings.TrimRight(val, "\r\n")
+	return chunk,Complete
+}
+
+func eval(interp *Interpreter, cmd string) (Value, CommandStatus) {
 	// For now, let's just return "woo hoo" if the value is "hello world", and otherwise "yup"
 	if cmd == "hello world" {
 		return "woo hoo", Complete
@@ -43,8 +49,11 @@ func print(interp *Interpreter, value Value) {
 
 func repl(interp *Interpreter) {
 	for {
-		fmt.Printf("$ ")
-		v, stat := readEval(interp)
+		cmd, stat := read(interp)
+		if stat == Quit {
+			return
+		}
+		v, stat := eval(interp, cmd)
 		if stat == Quit {
 			return
 		}
