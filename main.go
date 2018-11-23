@@ -27,16 +27,40 @@ type Value interface{
 }
 
 type Cons struct {
-	First *Value
-	Rest *Value
+	First Value
+	Rest Value
 }
 
 func (cons *Cons) Type() Type {
 	return ConsType
 }
+
 func (cons *Cons) String() string {
-	return "cons"
+	fmt.Printf("Hey!\n")
+	strarray := make([]string, 3)
+	strarray = append(strarray, "(")
+	strarray = append(strarray, cons.First.String())
+	curr := cons.Rest
+
+Loop:	
+	for {
+		fmt.Printf("THere!\n")
+		switch item := curr.(type) {
+		case *Null:
+			break Loop
+		case *Cons:
+			strarray = append(strarray, item.First.String())
+			curr = item.Rest
+		default:
+			strarray = append(strarray, ".")
+			strarray = append(strarray, curr.String())
+			break Loop
+		}
+	}
+	strarray = append(strarray, ")")
+	return strings.Join(strarray, " ")
 }
+
 
 type Scope struct {
 	ScopeTable map[string]Value
@@ -47,7 +71,7 @@ func (scope *Scope) Type() Type {
 }
 
 func (scope *Scope) String() string {
-	return "scope"
+	return "Scope"
 }
 
 type String struct {
@@ -57,7 +81,7 @@ func (str *String) Type() Type {
 	return StringType
 }
 func (str *String) String() string {
-	return str.Str
+	return fmt.Sprintf("\"%s\"", str.Str)
 }
 type Int struct {
 	Number int64
@@ -76,7 +100,7 @@ func (nul *Null) Type() Type {
 	return NullType
 }
 func (nul *Null) String() string {
-	return "Mynil"
+	return "Nil"
 }
 
 var Nil *Null
@@ -103,6 +127,9 @@ func repl(treeCh chan Value) {
 
 func treeizeHelper(inCh chan string, curr Value) Value {
 	next := <- inCh
+	if (next == "null") {
+		return Nil
+	}
 	intVal,err := strconv.ParseInt(next, 10, 64)
 	if err == nil {
 		// It's an int!
@@ -175,6 +202,15 @@ func tokenize(rawReader io.Reader, outCh chan string) error {
 }
 
 func main() {
+	hello := &String{Str: "Hello"}
+	world := &String{Str: "world"}
+	num := &Int{Number: 123}
+	a := &Cons{First: world, Rest: Nil}
+	b := &Cons{First: hello, Rest: a}
+	fmt.Printf("My first cons: %v\n", b)
+	d := &Cons{First: hello, Rest: num}
+	c := &Cons{First: b, Rest: d}
+	fmt.Printf("My second cons: %v\n", c)
 	tokenCh := make(chan string, 256)
 	treeCh := make(chan Value, 256)
 	go tokenize(os.Stdin, tokenCh)
