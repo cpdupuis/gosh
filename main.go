@@ -67,6 +67,25 @@ func repl(tokenCh chan string) {
 }
 
 
+func treeize(inCh chan string, outCh chan string) error {
+	parenCount := 0
+	for {
+		tok := <- inCh
+		switch tok {
+		case "(":
+			parenCount++
+		case ")":
+			parenCount--
+			if parenCount < 0 {
+				panic("Nope, too many closing parens")
+			}
+		default:
+			outCh <- tok
+		}
+
+	}
+}
+
 func tokenize(rawReader io.Reader, outCh chan string) error {
 	bufReader := bufio.NewReader(rawReader)
 	currTok := make([]byte, 0)
@@ -122,6 +141,8 @@ func tokenize(rawReader io.Reader, outCh chan string) error {
 
 func main() {
 	tokenCh := make(chan string, 256)
+	treeCh := make(chan string, 256)
 	go tokenize(os.Stdin, tokenCh)
-	repl(tokenCh)
+	go treeize(tokenCh, treeCh)
+	repl(treeCh)
 }
