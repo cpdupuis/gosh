@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strconv"
 	"io"
 	"os"
 	"fmt"
@@ -8,81 +9,111 @@ import (
 	"strings"
 )
 
-type Symbol string
 
-type Value interface{}
-
-
-type Interpreter struct {
-	Globals map[Symbol]Value
-	Reader *bufio.Reader
-}
-
-
-type CommandStatus int
+type Type int
 const (
-	Continue = iota
-	Quit
+	SymbolType = iota
+	StringType
+	ConsType
+	IntType
+	NullType
+	ScopeType
 )
 
+type Value interface{
+	Type() Type
+	String() string
+}
 
-type handlerFunc func([]string) (Value,error)
+type Cons struct {
+	First *Value
+	Rest *Value
+}
+
+func (cons *Cons) Type() Type {
+	return ConsType
+}
+func (cons *Cons) String() string {
+	return "cons"
+}
+
+type Scope struct {
+	ScopeTable map[string]Value
+}
+
+func (scope *Scope) Type() Type {
+	return ScopeType
+}
+
+func (scope *Scope) String() string {
+	return "scope"
+}
+
+type String struct {
+	Str string
+}
+func (str *String) Type() Type {
+	return StringType
+}
+func (str *String) String() string {
+	return str.Str
+}
+type Int struct {
+	Number int64
+}
+func (i *Int) Type() Type {
+	return IntType
+}
+func (i *Int) String() string {
+	return strconv.FormatInt(i.Number, 10)
+}
+
+type Null struct {
+
+}
+func (nul *Null) Type() Type {
+	return NullType
+}
+func (nul *Null) String() string {
+	return "Mynil"
+}
+
+var Nil *Null
+
+type handlerFunc func([]string) (string,error)
 
 var handlerTable = map[string]handlerFunc{}
 
-func def(words []string) (Value,error) {
-	return "",nil	
+func def(words []string) (string,error) {
+	return "",nil
 }
 
 func init() {
 	handlerTable["def"] = def
 }
 
-// Return the next complete parseable chunk.
-func read(interp *Interpreter) (string, CommandStatus) {
-	fmt.Printf("$ ")
-	val, _ := interp.Reader.ReadString('\n')
-	chunk := strings.TrimRight(val, "\r\n")
-	return chunk,Continue
-}
-
-func eval(interp *Interpreter, cmd string) (Value, CommandStatus) {
-	words := strings.Split(cmd, " ")
-	if len(words) == 0 {
-		return "", Continue
-	} else {
-		return fmt.Sprintf("Yeah. %+v", words), Continue
-	}
-}
-
-func print(interp *Interpreter, value Value) {
-	fmt.Printf("%+v\n", value)
-}
-
-func repl(tokenCh chan string) {
+func repl(treeCh chan Value) {
 	for {
-		token := <- tokenCh
-		fmt.Printf("Token: <%v>\n", token)
+		tree := <- treeCh
+		fmt.Printf("Tree: <%+v>\n", tree)
 	}
 }
 
 
-func treeize(inCh chan string, outCh chan string) error {
-	parenCount := 0
-	for {
-		tok := <- inCh
-		switch tok {
-		case "(":
-			parenCount++
-		case ")":
-			parenCount--
-			if parenCount < 0 {
-				panic("Nope, too many closing parens")
-			}
-		default:
-			outCh <- tok
-		}
+func treeizeHelper(inCh chan string, curr Value) Value {
+	next := <- inCh
+	val,err := strconv.ParseInt(next, 10, 64)
+	if err == nil {
+		// It's an int!
+		return &Int{Number: val}
+	}
 
+	return Nil
+}
+
+func treeize(inCh chan string, outCh chan Value) Value {
+	for {
+		outCh <- treeizeHelper(inCh, Nil)
 	}
 }
 
@@ -141,7 +172,7 @@ func tokenize(rawReader io.Reader, outCh chan string) error {
 
 func main() {
 	tokenCh := make(chan string, 256)
-	treeCh := make(chan string, 256)
+	treeCh := make(chan Value, 256)
 	go tokenize(os.Stdin, tokenCh)
 	go treeize(tokenCh, treeCh)
 	repl(treeCh)
