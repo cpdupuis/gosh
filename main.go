@@ -36,7 +36,6 @@ func (cons *Cons) Type() Type {
 }
 
 func (cons *Cons) String() string {
-	fmt.Printf("Hey!\n")
 	strarray := make([]string, 3)
 	strarray = append(strarray, "(")
 	strarray = append(strarray, cons.First.String())
@@ -44,7 +43,6 @@ func (cons *Cons) String() string {
 
 Loop:	
 	for {
-		fmt.Printf("THere!\n")
 		switch item := curr.(type) {
 		case *Null:
 			break Loop
@@ -127,8 +125,11 @@ func repl(treeCh chan Value) {
 
 func treeizeHelper(inCh chan string, curr Value) Value {
 	next := <- inCh
-	if (next == "null") {
+	if next == "null" {
 		return Nil
+	}
+	if next == "(" {
+		// ?
 	}
 	intVal,err := strconv.ParseInt(next, 10, 64)
 	if err == nil {
