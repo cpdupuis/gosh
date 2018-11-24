@@ -14,7 +14,7 @@ func (cons *Cons) Type() Type {
 }
 
 func (cons *Cons) String() string {
-	strarray := make([]string, 3)
+	strarray := make([]string, 0)
 	strarray = append(strarray, "(")
 	strarray = append(strarray, cons.First.String())
 	curr := cons.Rest
