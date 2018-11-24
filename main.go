@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/cpdupuis/gosh/lang"
 	"os"
-	"regexp"
-	"strconv"
-	"strings"
+	"github.com/cpdupuis/gosh/lang"
 )
 
 type handlerFunc func([]string) (string, error)
@@ -28,64 +25,10 @@ func repl(treeCh chan lang.Value) {
 	}
 }
 
-type ParseStatus int
-const (
-	OK = iota
-	CloseSExp
-	Dot
-)
-
-func parseSExp(inCh chan string) (lang.Value, ParseStatus) {
-	next := <-inCh
-	if next == "null" {
-		return lang.Nil,OK
-	}
-	if next == ")" {
-		return lang.Nil,CloseSExp
-	}
-	if next == "." {
-		return lang.Nil, Dot
-	}
-	if (next == "(") {
-		// We're going to build a list until the closing )
-		var res *lang.Cons
-		var curr *lang.Cons
-		for {
-			item,status := parseSExp(inCh)
-			fmt.Printf("Here is item: %v\n", item)
-			if status == CloseSExp {
-				curr.Rest = lang.Nil
-				return res, OK
-			} else if status == Dot {
-				curr.Rest, status = parseSExp(inCh)
-				return res,OK
-			} else {
-				newcons := &lang.Cons{First:item}
-				if res == nil {
-					res = newcons
-					curr = newcons
-				} else {
-					curr.Rest = newcons
-					curr = newcons
-				}
-			}
-		}
-	}
-	intVal, err := strconv.ParseInt(next, 10, 64)
-	if err == nil {
-		// It's an int!
-		return &lang.Int{Number: intVal}, OK
-	}
-	match, err := regexp.MatchString("^\".*\"$", next)
-	if match {
-		return &lang.String{Str: strings.Trim(next, "\"")}, OK
-	}
-	return lang.Nil, OK
-}
 
 func treeize(inCh chan string, outCh chan lang.Value) lang.Value {
 	for {
-		sexp,_ := parseSExp(inCh)
+		sexp,_ := lang.ParseSExp(inCh)
 		outCh <- sexp
 	}
 }
