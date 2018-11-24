@@ -34,15 +34,6 @@ func treeize(inCh chan string, outCh chan lang.Value) lang.Value {
 }
 
 func main() {
-	hello := &lang.String{Str: "Hello"}
-	world := &lang.String{Str: "world"}
-	num := &lang.Int{Number: 123}
-	a := &lang.Cons{First: world, Rest: lang.Nil}
-	b := &lang.Cons{First: hello, Rest: a}
-	fmt.Printf("My first cons: %v\n", b)
-	d := &lang.Cons{First: hello, Rest: num}
-	c := &lang.Cons{First: b, Rest: d}
-	fmt.Printf("My second cons: %v\n", c)
 	tokenCh := make(chan string, 256)
 	treeCh := make(chan lang.Value, 256)
 	go lang.Tokenize(os.Stdin, tokenCh)
