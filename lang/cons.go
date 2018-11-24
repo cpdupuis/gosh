@@ -22,7 +22,7 @@ func (cons *Cons) String() string {
 Loop:	
 	for {
 		switch item := curr.(type) {
-		case *Null:
+		case *null:
 			break Loop
 		case *Cons:
 			strarray = append(strarray, item.First.String())

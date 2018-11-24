@@ -1,13 +1,12 @@
 package lang
 
-type Null struct {
-
+type null struct {
 }
-func (nul *Null) Type() Type {
+func (nul *null) Type() Type {
 	return NullType
 }
-func (nul *Null) String() string {
+func (nul *null) String() string {
 	return "Nil"
 }
 
-var Nil *Null
+var Nil *null
