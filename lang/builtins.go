@@ -27,3 +27,20 @@ func BuiltinPlus(scope *Scope, paramSyms []*Symbol) (Value,error) {
 	retval := &Int{Number:res}
 	return retval,nil
 }
+
+func BuiltinCons(scope *Scope, paramSyms []*Symbol) (Value,error) {
+	if len(paramSyms) != 2 {
+		return Nil,errors.New(fmt.Sprintf("Too many args: %d", len(paramSyms)))
+	}
+	f := scope.Resolve(paramSyms[0])
+	r := scope.Resolve(paramSyms[1])
+	if first,ok := f.(Value); ok {
+		if rest,ok := r.(List); ok {
+			return &Cons{First:first, Rest:rest}, nil
+		} else {
+			return Nil,errors.New(fmt.Sprintf("Invalid rest: %+v", r))
+		}
+	} else {
+		return Nil,errors.New(fmt.Sprintf("Invalid first: %+v", f))
+	}
+}
