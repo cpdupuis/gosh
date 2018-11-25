@@ -42,5 +42,16 @@ func (lambda *Lambda) Call(params List) (Value,error) {
 	if params.Length() != lambda.Arity() {
 		return Nil,errors.New("Inconceivable!")
 	}
+	scope := &Scope{}
+	plist := params
+	for _, paramSym := range(lambda.ParamSyms) {
+		cons,ok := plist.(*Cons)
+		if ok {
+			scope.Define(paramSym, cons.First)
+			plist = cons.Rest
+		} else {
+			return Nil,errors.New("Malformed list in call!")
+		}
+	}
 	return Nil,nil
 }

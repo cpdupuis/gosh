@@ -11,7 +11,6 @@ type ParseStatus int
 const (
 	OK = iota
 	CloseSExp
-	Dot
 )
 
 func ParseSExp(inCh chan string) (Value, ParseStatus) {
@@ -21,9 +20,6 @@ func ParseSExp(inCh chan string) (Value, ParseStatus) {
 	}
 	if next == ")" {
 		return Nil,CloseSExp
-	}
-	if next == "." {
-		return Nil, Dot
 	}
 	if (next == "(") {
 		// We're going to build a list until the closing )
@@ -35,9 +31,6 @@ func ParseSExp(inCh chan string) (Value, ParseStatus) {
 			if status == CloseSExp {
 				curr.Rest = Nil
 				return res, OK
-			} else if status == Dot {
-				curr.Rest, status = ParseSExp(inCh)
-				return res,OK
 			} else {
 				newcons := &Cons{First:item}
 				if res == nil {

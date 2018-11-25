@@ -32,12 +32,3 @@ func TestLength4(t *testing.T) {
 		t.Fail()
 	}
 }
-
-func TestLengthDot(t *testing.T) {
-	sym := &lang.Symbol{Sym:"hi"}
-	cons := &lang.Cons{First:sym, Rest:sym}
-	length := cons.Length()
-	if length != 2 {
-		t.Fail()
-	}
-}

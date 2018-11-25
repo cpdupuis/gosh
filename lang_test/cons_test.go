@@ -14,9 +14,10 @@ func TestConsString(t *testing.T) {
 	if b.String() != "( \"Hello\" \"world\" )" {
 		t.Errorf("Wrong first string: %v\n", b.String())
 	}
-	d := &lang.Cons{First: hello, Rest: num}
+	e := &lang.Cons{First:num, Rest: lang.Nil}
+	d := &lang.Cons{First: hello, Rest: e}
 	c := &lang.Cons{First: b, Rest: d}
-	if c.String() != "( ( \"Hello\" \"world\" ) \"Hello\" . 123 )" {
+	if c.String() != "( ( \"Hello\" \"world\" ) \"Hello\" 123 )" {
 		t.Errorf("Wrong second string: %v\n", c.String())
 	}
 

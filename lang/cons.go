@@ -6,7 +6,7 @@ import (
 
 type Cons struct {
 	First Value
-	Rest Value
+	Rest List
 }
 
 func (cons *Cons) Type() Type {
@@ -28,9 +28,7 @@ Loop:
 			strarray = append(strarray, item.First.String())
 			curr = item.Rest
 		default:
-			strarray = append(strarray, ".")
-			strarray = append(strarray, curr.String())
-			break Loop
+			panic("Unexpected!")
 		}
 	}
 	strarray = append(strarray, ")")
