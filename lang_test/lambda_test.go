@@ -10,7 +10,7 @@ func TestLambdaArity(t *testing.T) {
 	bar := &lang.Symbol{Sym: "bar"}
 	baz := &lang.Symbol{Sym: "baz"}
 	params := [3]*lang.Symbol{foo, bar, baz}
-	lambda := &lang.Lambda{params[:], foo}
+	lambda := &lang.Lambda{ParamSyms: params[:], Body: foo}
 	if lambda.Arity() != 3 {
 		t.Fail()
 	}
@@ -21,7 +21,7 @@ func TestLambdaString(t *testing.T) {
 	bar := &lang.Symbol{Sym: "bar"}
 	baz := &lang.Symbol{Sym: "baz"}
 	params := [3]*lang.Symbol{foo, bar, baz}
-	lambda := &lang.Lambda{params[:], foo}
+	lambda := &lang.Lambda{ParamSyms: params[:], Body: foo}
 	str := lambda.String()
 	if str != "(lambda (foo bar baz) foo)" {
 		t.Errorf("Wrong string: %v", str)
@@ -33,7 +33,7 @@ func TestLambdaInvalidParams(t *testing.T) {
 	bar := &lang.Symbol{Sym: "bar"}
 	baz := &lang.Symbol{Sym: "baz"}
 	params := [3]*lang.Symbol{foo, bar, baz}
-	lambda := &lang.Lambda{params[:], foo}
+	lambda := &lang.Lambda{ParamSyms: params[:], Body: foo}
 	scope := lang.NewScope(nil)
 	res,err := lambda.Call(scope, lang.Nil)
 	if res != lang.Nil {
@@ -49,7 +49,7 @@ func TestLambdaSimpleFunc(t *testing.T) {
 	bar := &lang.Symbol{Sym: "bar"}
 	baz := &lang.Symbol{Sym: "baz"}
 	params := [3]*lang.Symbol{foo, bar, baz}
-	lambda := &lang.Lambda{params[:], bar}
+	lambda := &lang.Lambda{ParamSyms: params[:], Body: bar}
 	scope := lang.NewScope(nil)
 	num1 := &lang.Int{Number: 42}
 	num2 := &lang.Int{Number:8675309}

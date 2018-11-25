@@ -9,6 +9,7 @@ import (
 type Lambda struct {
 	ParamSyms []*Symbol
 	Body Value
+	BuiltinFunc func(*Scope,[]*Symbol) (Value,error)
 }
 
 func (lambda *Lambda) Type() Type {
@@ -54,6 +55,12 @@ func (lambda *Lambda) Call(scope *Scope, params List) (Value,error) {
 		}
 	}
 	// OK, our scope is now populated with our values! Woo hoo! Let's eval!
-	result := lambda.Body.Eval(sc)
-	return result,nil
+	var result Value
+	var err error
+	if lambda.BuiltinFunc != nil {
+		result,err = lambda.BuiltinFunc(sc, lambda.ParamSyms)
+	} else {
+		result = lambda.Body.Eval(sc)
+	}
+	return result,err
 }
