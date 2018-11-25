@@ -52,5 +52,6 @@ func ParseSExp(inCh chan string) (Value, ParseStatus) {
 	if match {
 		return &String{Str: strings.Trim(next, "\"")}, OK
 	}
+	panic(fmt.Sprintf("I have no idea what to do with this string: %v", next))
 	return Nil, OK
 }

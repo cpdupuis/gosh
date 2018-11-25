@@ -14,5 +14,5 @@ const (
 type Value interface{
 	Type() Type
 	String() string
-	Eval(sc *Scope) Value
+	Eval(sc *Scope) (Value,error)
 }

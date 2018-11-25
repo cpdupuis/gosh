@@ -8,9 +8,9 @@ func (nul *null) Type() Type {
 func (nul *null) String() string {
 	return "Nil"
 }
-func (nul *null) Eval(sc *Scope) Value {
+func (nul *null) Eval(sc *Scope) (Value,error) {
 	// evaluating null returns itself
-	return Nil
+	return Nil,nil
 }
 
 func (nul *null) Length() int {

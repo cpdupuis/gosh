@@ -29,9 +29,9 @@ func (lambda *Lambda) String() string {
 	return fmt.Sprintf("(lambda (%v) %v)", sb.String(), lambda.Body.String())
 }
 
-func (lambda *Lambda) Eval(scope *Scope) Value {
+func (lambda *Lambda) Eval(scope *Scope) (Value,error) {
 	// Evaluating a lambda just returns the lambda, I guess. Or maybe it should call it with no args? Seems odd.
-	return lambda
+	return lambda,nil
 }
 
 func (lambda *Lambda) Arity() int {
@@ -60,7 +60,7 @@ func (lambda *Lambda) Call(scope *Scope, params List) (Value,error) {
 	if lambda.BuiltinFunc != nil {
 		result,err = lambda.BuiltinFunc(sc, lambda.ParamSyms)
 	} else {
-		result = lambda.Body.Eval(sc)
+		result,err = lambda.Body.Eval(sc)
 	}
 	return result,err
 }

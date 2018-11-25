@@ -18,10 +18,11 @@ func (scope *Scope) Type() Type {
 func (scope *Scope) String() string {
 	return "Scope"
 }
-func (scope *Scope) Eval(sc *Scope) Value {
+func (scope *Scope) Eval(sc *Scope) (Value,error) {
 	// You can't evaluate a scope. Sorry.
-	return Nil
+	return Nil,nil
 }
+
 func (scope *Scope) Resolve(sym *Symbol) Value {
 	key := sym.Sym
 	for sc := scope; sc != nil; sc = sc.Parent {
