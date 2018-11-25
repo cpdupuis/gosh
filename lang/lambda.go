@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -36,7 +37,10 @@ func (lambda *Lambda) Arity() int {
 	return len(lambda.ParamSyms)
 }
 
-func (lambda *Lambda) Call(params *List) Value {
-	// OK, so someone wants to call this function with some parameters. Cool. Let's make it happen.
-	return Nil
+func (lambda *Lambda) Call(params List) (Value,error) {
+		// OK, so someone wants to call this function with some parameters. Cool. Let's make it happen.
+	if params.Length() != lambda.Arity() {
+		return Nil,errors.New("Inconceivable!")
+	}
+	return Nil,nil
 }

@@ -27,3 +27,18 @@ func TestLambdaString(t *testing.T) {
 		t.Errorf("Wrong string: %v", str)
 	}
 }
+
+func TestLambdaInvalidParams(t *testing.T) {
+	foo := &lang.Symbol{Sym: "foo"}
+	bar := &lang.Symbol{Sym: "bar"}
+	baz := &lang.Symbol{Sym: "baz"}
+	params := [3]*lang.Symbol{foo, bar, baz}
+	lambda := &lang.Lambda{params[:], foo}
+	res,err := lambda.Call(lang.Nil)
+	if res != lang.Nil {
+		t.Fail()
+	}
+	if err.Error() != "Inconceivable!" {
+		t.Errorf("Wrong error: %v", err.Error())
+	}
+}
