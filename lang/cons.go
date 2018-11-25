@@ -40,3 +40,12 @@ Loop:
 func (cons *Cons) Eval(sc *Scope) Value {
 	return Nil
 }
+
+func (cons *Cons) Length() int {
+	list,ok := cons.Rest.(List)
+	if ok {
+		return 1 + list.Length()
+	} else {
+		return 2 // Why 2? Because rest is not a Cons and not Nil. So I guess my length is 2.
+	}
+}

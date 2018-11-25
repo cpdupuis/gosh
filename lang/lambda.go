@@ -32,3 +32,8 @@ func (lambda *Lambda) Eval(scope *Scope) Value {
 	// Evaluating a lambda just returns the lambda, I guess. Or maybe it should call it with no args? Seems odd.
 	return lambda
 }
+
+
+func (lambda *Lambda) Call(params *List) {
+	
+}

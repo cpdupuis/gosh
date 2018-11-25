@@ -12,4 +12,9 @@ func (nul *null) Eval(sc *Scope) Value {
 	// evaluating null returns itself
 	return Nil
 }
+
+func (nul *null) Length() int {
+	return 0
+}
+
 var Nil *null
