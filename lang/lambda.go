@@ -6,7 +6,6 @@ import (
 )
 
 type Lambda struct {
-	Arity int
 	ParamSyms []*Symbol
 	Body Value
 }
@@ -33,7 +32,11 @@ func (lambda *Lambda) Eval(scope *Scope) Value {
 	return lambda
 }
 
+func (lambda *Lambda) Arity() int {
+	return len(lambda.ParamSyms)
+}
 
-func (lambda *Lambda) Call(params *List) {
-	
+func (lambda *Lambda) Call(params *List) Value {
+	// OK, so someone wants to call this function with some parameters. Cool. Let's make it happen.
+	return Nil
 }
