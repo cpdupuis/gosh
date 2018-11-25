@@ -6,7 +6,7 @@ type Environment struct {
 
 func NewEnvironment() *Environment {
 	env := &Environment{}
-	sc := &Scope{}
+	sc := NewScope(nil)
 	env.Root = sc
 	return env
 }

@@ -5,6 +5,12 @@ type Scope struct {
 	Parent *Scope
 }
 
+func NewScope(parent *Scope) *Scope {
+	scope := &Scope{Parent:parent}
+	scope.ScopeTable = make(map[string]Value)
+	return scope
+}
+
 func (scope *Scope) Type() Type {
 	return ScopeType
 }

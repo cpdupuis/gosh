@@ -37,21 +37,23 @@ func (lambda *Lambda) Arity() int {
 	return len(lambda.ParamSyms)
 }
 
-func (lambda *Lambda) Call(params List) (Value,error) {
+func (lambda *Lambda) Call(scope *Scope, params List) (Value,error) {
 		// OK, so someone wants to call this function with some parameters. Cool. Let's make it happen.
 	if params.Length() != lambda.Arity() {
 		return Nil,errors.New("Inconceivable!")
 	}
-	scope := &Scope{}
+	sc := NewScope(scope)
 	plist := params
 	for _, paramSym := range(lambda.ParamSyms) {
 		cons,ok := plist.(*Cons)
 		if ok {
-			scope.Define(paramSym, cons.First)
+			sc.Define(paramSym, cons.First)
 			plist = cons.Rest
 		} else {
 			return Nil,errors.New("Malformed list in call!")
 		}
 	}
-	return Nil,nil
+	// OK, our scope is now populated with our values! Woo hoo! Let's eval!
+	result := lambda.Body.Eval(sc)
+	return result,nil
 }
