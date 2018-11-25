@@ -13,5 +13,6 @@ func (sym *Symbol) String() string {
 }
 
 func (sym *Symbol) Eval(sc *Scope) Value {
-	return Nil
+	// Evaluating a symbol returns its value in the scope
+	return sc.Resolve(sym)
 }
