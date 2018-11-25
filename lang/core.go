@@ -6,6 +6,7 @@ const (
 	StringType
 	ConsType
 	IntType
+	LambdaType
 	NullType
 	ScopeType
 )
