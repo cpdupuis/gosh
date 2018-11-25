@@ -6,18 +6,6 @@ import (
 	"github.com/cpdupuis/gosh/lang"
 )
 
-type handlerFunc func([]string) (string, error)
-
-var handlerTable = map[string]handlerFunc{}
-
-func def(words []string) (string, error) {
-	return "", nil
-}
-
-func init() {
-	handlerTable["def"] = def
-}
-
 func repl(treeCh chan lang.Value) {
 	for {
 		tree := <-treeCh

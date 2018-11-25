@@ -13,8 +13,8 @@ func (scope *Scope) String() string {
 	return "Scope"
 }
 func (scope *Scope) Eval(sc *Scope) Value {
-	// Evaluating a scope always returns itself
-	return scope
+	// You can't evaluate a scope. Sorry.
+	return Nil
 }
 func (scope *Scope) Resolve(sym *Symbol) Value {
 	key := sym.Sym
