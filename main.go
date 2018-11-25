@@ -7,9 +7,16 @@ import (
 )
 
 func repl(treeCh chan lang.Value) {
+	env := lang.NewEnvironment()
 	for {
 		tree := <-treeCh
 		fmt.Printf("Tree: <%+v>\n", tree)
+		res,err := tree.Eval(env.Root)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err.Error())
+		} else {
+			fmt.Printf("Result: %+v\n", res)
+		}
 	}
 }
 

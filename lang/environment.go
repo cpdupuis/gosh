@@ -16,6 +16,8 @@ func SetupRootScope(sc *Scope) {
 	ab := []string {"a", "b"}
 	plus := CreateBuiltin(ab, BuiltinPlus)
 	sc.Define(&Symbol{Sym:"+"}, plus)
+	cons := CreateBuiltin(ab, BuiltinCons)
+	sc.Define(&Symbol{Sym:"cons"}, cons)
 }
 
 // Here are all the functions in the default environment

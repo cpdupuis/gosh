@@ -41,7 +41,11 @@ func (cons *Cons) Eval(sc *Scope) (Value,error) {
 	// Eval'ing a cons means calling the lambda in the car with the cons in the cdr.
 	first := cons.First
 	rest := cons.Rest
-	if lambda,ok := first.(*Lambda); ok {
+	firstVal,err := first.Eval(sc)
+	if err != nil {
+		return Nil,err
+	}
+	if lambda,ok := firstVal.(*Lambda); ok {
 		return lambda.Call(sc, rest)
 	} else {
 		return Nil,errors.New(fmt.Sprintf("first is not a lambda: %+v", first))
