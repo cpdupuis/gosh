@@ -48,7 +48,12 @@ func (lambda *Lambda) Call(scope *Scope, params List) (Value,error) {
 	for _, paramSym := range(lambda.ParamSyms) {
 		cons,ok := plist.(*Cons)
 		if ok {
-			sc.Define(paramSym, cons.First)
+			// This is eager evaluation.
+			val,err := cons.First.Eval(sc)
+			if err != nil {
+				return Nil,err
+			}
+			sc.Define(paramSym, val)
 			plist = cons.Rest
 		} else {
 			return Nil,errors.New("Malformed list in call!")
