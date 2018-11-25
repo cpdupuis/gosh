@@ -12,3 +12,6 @@ func (sym *Symbol) String() string {
 	return sym.Sym
 }
 
+func (sym *Symbol) Eval(sc *Scope) Value {
+	return Nil
+}

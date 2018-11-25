@@ -36,3 +36,7 @@ Loop:
 	strarray = append(strarray, ")")
 	return strings.Join(strarray, " ")
 }
+
+func (cons *Cons) Eval(sc *Scope) Value {
+	return Nil
+}

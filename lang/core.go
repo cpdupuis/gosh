@@ -13,4 +13,5 @@ const (
 type Value interface{
 	Type() Type
 	String() string
+	Eval(sc *Scope) Value
 }

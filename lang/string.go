@@ -13,3 +13,7 @@ func (str *String) Type() Type {
 func (str *String) String() string {
 	return fmt.Sprintf("\"%s\"", str.Str)
 }
+func (str *String) Eval(sc *Scope) Value {
+	// Evaluating a String returns itself
+	return str
+}

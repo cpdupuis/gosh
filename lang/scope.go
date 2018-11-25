@@ -11,4 +11,7 @@ func (scope *Scope) Type() Type {
 func (scope *Scope) String() string {
 	return "Scope"
 }
-
+func (scope *Scope) Eval(sc *Scope) Value {
+	// Evaluating a scope always returns itself
+	return scope
+}

@@ -13,3 +13,8 @@ func (i *Int) Type() Type {
 func (i *Int) String() string {
 	return strconv.FormatInt(i.Number, 10)
 }
+
+func (i *Int) Eval(sc *Scope) Value {
+	// evaluating an int returns itself
+	return i
+}
