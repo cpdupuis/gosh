@@ -38,7 +38,7 @@ func TestBuiltinCons(t *testing.T) {
 
 	res,err := lambda.Call(scope, consArgs)
 	if err != nil {
-		t.Fail()
+		t.Errorf("Failed: %s", err.Error())
 	}
 	if c,ok := res.(*lang.Cons); ok {
 		str := c.String()
@@ -46,6 +46,6 @@ func TestBuiltinCons(t *testing.T) {
 			t.Errorf("Wrong list: %+v", str)
 		}
 	} else {
-		t.Fail()
+		t.Errorf("Res is not cons: %+v", res)
 	}
 }

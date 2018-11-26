@@ -14,5 +14,10 @@ func (sym *Symbol) String() string {
 
 func (sym *Symbol) Eval(sc *Scope) (Value, error) {
 	// Evaluating a symbol returns its value in the scope
-	return sc.Resolve(sym), nil
+	val := sc.Resolve(sym)
+	if val == Nil {
+		return sym,nil
+	} else {
+		return val,nil
+	}
 }

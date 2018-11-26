@@ -55,7 +55,7 @@ func BuiltinDef(scope *Scope, paramSyms []*Symbol) (Value,error) {
 	key := scope.Resolve(paramSyms[0])
 	fmt.Printf("Key: %+v, Value: %+v\n", key, val)
 	if k,ok := key.(*Symbol); ok {
-		scope.Define(k, val)
+		scope.Parent.Define(k, val)
 		return val,nil
 	} else {
 		return Nil,errors.New(fmt.Sprintf("Key is not symbol: %+v", key))
