@@ -29,7 +29,7 @@ func (lambda *Lambda) String() string {
 	return fmt.Sprintf("(lambda (%v) %v)", sb.String(), lambda.Body.String())
 }
 
-func (lambda *Lambda) Eval(scope *Scope) (Value,error) {
+func (lambda *Lambda) Eval(scope *Scope, ec *EvalContext) (Value,error) {
 	// Evaluating a lambda just returns the lambda, I guess. Or maybe it should call it with no args? Seems odd.
 	return lambda,nil
 }
@@ -49,7 +49,7 @@ func (lambda *Lambda) Call(scope *Scope, params List) (Value,error) {
 		cons,ok := plist.(*Cons)
 		if ok {
 			// This is eager evaluation.
-			val,err := cons.First.Eval(sc)
+			val,err := cons.First.Eval(sc, nil)
 			if err != nil {
 				return Nil,err
 			}
@@ -65,7 +65,7 @@ func (lambda *Lambda) Call(scope *Scope, params List) (Value,error) {
 	if lambda.BuiltinFunc != nil {
 		result,err = lambda.BuiltinFunc(sc, lambda.ParamSyms)
 	} else {
-		result,err = lambda.Body.Eval(sc)
+		result,err = lambda.Body.Eval(sc, nil)
 	}
 	return result,err
 }

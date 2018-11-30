@@ -18,7 +18,7 @@ func (scope *Scope) Type() Type {
 func (scope *Scope) String() string {
 	return "Scope"
 }
-func (scope *Scope) Eval(sc *Scope) (Value,error) {
+func (scope *Scope) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 	// You can't evaluate a scope. Sorry.
 	return Nil,nil
 }

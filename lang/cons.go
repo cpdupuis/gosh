@@ -35,10 +35,10 @@ Loop:
 	return strings.Join(strarray, " ")
 }
 
-func (cons *Cons) Eval(sc *Scope) (Value,error) {
+func (cons *Cons) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 	// Eval'ing a cons means calling the lambda in the car with the cons in the cdr.
 	first := cons.First
-	firstVal,err := first.Eval(sc)
+	firstVal,err := first.Eval(sc, ec)
 	if err != nil {
 		return Nil,err
 	}

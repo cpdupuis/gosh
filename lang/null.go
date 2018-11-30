@@ -8,7 +8,7 @@ func (nul *null) Type() Type {
 func (nul *null) String() string {
 	return "Nil"
 }
-func (nul *null) Eval(sc *Scope) (Value,error) {
+func (nul *null) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 	// evaluating null returns itself
 	return Nil,nil
 }

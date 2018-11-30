@@ -12,7 +12,7 @@ func (sym *Symbol) String() string {
 	return sym.Sym
 }
 
-func (sym *Symbol) Eval(sc *Scope) (Value, error) {
+func (sym *Symbol) Eval(sc *Scope, ec *EvalContext) (Value, error) {
 	// Evaluating a symbol returns its value in the scope
 	val := sc.Resolve(sym)
 	if val == Nil {

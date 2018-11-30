@@ -14,7 +14,7 @@ func (i *Int) String() string {
 	return strconv.FormatInt(i.Number, 10)
 }
 
-func (i *Int) Eval(sc *Scope) (Value,error) {
+func (i *Int) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 	// evaluating an int returns itself
 	return i,nil
 }

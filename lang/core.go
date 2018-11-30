@@ -11,8 +11,17 @@ const (
 	ScopeType
 )
 
-type Value interface{
+type Value interface {
 	Type() Type
 	String() string
-	Eval(sc *Scope) (Value,error)
+	Eval(sc *Scope, ec *EvalContext) (Value,error)
+}
+
+type EvalContextFrame struct {
+	CurrentLocation int
+	ShouldEvalLocation func(int)
+}
+
+type EvalContext struct {
+	Frames []*EvalContextFrame
 }
