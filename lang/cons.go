@@ -43,7 +43,7 @@ func (cons *Cons) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 		return Nil,err
 	}
 	if lambda,ok := firstVal.(*Lambda); ok {
-		return lambda.Call(sc, cons.Rest)
+		return lambda.Call(sc, ec, cons.Rest)
 	} else {
 		return cons,nil
 	}

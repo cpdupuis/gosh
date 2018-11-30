@@ -31,14 +31,14 @@ func (lambda *Lambda) String() string {
 
 func (lambda *Lambda) Eval(scope *Scope, ec *EvalContext) (Value,error) {
 	// Evaluating a lambda just returns the lambda, I guess. Or maybe it should call it with no args? Seems odd.
-	return lambda,nil
+	return nil,errors.New("Can't eval a lambda")
 }
 
 func (lambda *Lambda) Arity() int {
 	return len(lambda.ParamSyms)
 }
 
-func (lambda *Lambda) Call(scope *Scope, params List) (Value,error) {
+func (lambda *Lambda) Call(scope *Scope, ec *EvalContext, params List) (Value,error) {
 		// OK, so someone wants to call this function with some parameters. Cool. Let's make it happen.
 	if params.Length() != lambda.Arity() {
 		return Nil,errors.New("Inconceivable!")

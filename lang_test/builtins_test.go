@@ -11,7 +11,8 @@ func TestBuiltinPlus(t *testing.T) {
 	scope := lang.NewScope(nil)
 	cons := &lang.Cons{First:&lang.Int{Number: 3}, Rest: lang.Nil}
 	cons = &lang.Cons{First:&lang.Int{Number: 5}, Rest: cons}
-	res,err := lambda.Call(scope, cons)
+	ec := &lang.EvalContext{}
+	res,err := lambda.Call(scope, ec, cons)
 	if err != nil {
 		t.Fail()
 	}
@@ -28,6 +29,7 @@ func TestBuiltinCons(t *testing.T) {
 	paramNames := []string{"foo", "bar"}
 	lambda := lang.CreateBuiltin(paramNames, lang.BuiltinCons)
 	scope := lang.NewScope(nil)
+	ec := &lang.EvalContext{}
 	cons := &lang.Cons{First:&lang.Int{Number: 3}, Rest: lang.Nil}
 	cons = &lang.Cons{First:&lang.Int{Number: 5}, Rest: cons}
 
@@ -36,7 +38,7 @@ func TestBuiltinCons(t *testing.T) {
 	consArgs := &lang.Cons{First:cons, Rest: lang.Nil}
 	consArgs = &lang.Cons{First:seven, Rest: consArgs}
 
-	res,err := lambda.Call(scope, consArgs)
+	res,err := lambda.Call(scope, ec, consArgs)
 	if err != nil {
 		t.Errorf("Failed: %s", err.Error())
 	}

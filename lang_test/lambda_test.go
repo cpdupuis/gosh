@@ -35,7 +35,8 @@ func TestLambdaInvalidParams(t *testing.T) {
 	params := [3]*lang.Symbol{foo, bar, baz}
 	lambda := &lang.Lambda{ParamSyms: params[:], Body: foo}
 	scope := lang.NewScope(nil)
-	res,err := lambda.Call(scope, lang.Nil)
+	ec := &lang.EvalContext{}
+	res,err := lambda.Call(scope, ec, lang.Nil)
 	if res != lang.Nil {
 		t.Fail()
 	}
@@ -51,13 +52,14 @@ func TestLambdaSimpleFunc(t *testing.T) {
 	params := [3]*lang.Symbol{foo, bar, baz}
 	lambda := &lang.Lambda{ParamSyms: params[:], Body: bar}
 	scope := lang.NewScope(nil)
+	ec := &lang.EvalContext{}
 	num1 := &lang.Int{Number: 42}
 	num2 := &lang.Int{Number:8675309}
 	num3 := &lang.Int{Number:909}
 	cons := &lang.Cons{First: num3, Rest: lang.Nil}
 	cons = &lang.Cons{First:num2, Rest: cons}
 	cons = &lang.Cons{First:num1, Rest: cons}
-	res,err := lambda.Call(scope, cons)
+	res,err := lambda.Call(scope, ec, cons)
 	if err != nil {
 		t.Fail()
 	}
