@@ -1,9 +1,5 @@
 package lang
 
-import (
-	"fmt"
-)
-
 type EvalContextFrame struct {
 	CurrentLocation int
 	ShouldEvalLocation func(int) bool
@@ -46,7 +42,6 @@ func (ec *EvalContext) Top() *EvalContextFrame {
 }
 
 func (ec *EvalContext) Push(form Form) {
-	fmt.Printf("PUSH\n")
 	ec.Frames = append(ec.Frames, 
 		&EvalContextFrame{
 			// This is a normal context. Eval everything
@@ -55,7 +50,6 @@ func (ec *EvalContext) Push(form Form) {
 }
 
 func (ec *EvalContext) Pop() {
-	fmt.Printf("POP\n")
 	ec.Frames = ec.Frames[:len(ec.Frames)-1]
 }
 
