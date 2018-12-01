@@ -10,8 +10,9 @@ func repl(treeCh chan lang.Value) {
 	env := lang.NewEnvironment()
 	for {
 		tree := <-treeCh
+		ctx := &lang.EvalContext{}
 		fmt.Printf("Tree: <%+v>\n", tree)
-		res,err := tree.Eval(env.Root)
+		res,err := tree.Eval(env.Root, ctx)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err.Error())
 		} else {
