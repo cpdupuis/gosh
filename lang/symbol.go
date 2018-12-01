@@ -1,5 +1,10 @@
 package lang
 
+import (
+	"errors"
+	"fmt"
+)
+
 type Symbol struct {
 	Sym string
 }
@@ -16,7 +21,7 @@ func (sym *Symbol) Eval(sc *Scope, ec *EvalContext) (Value, error) {
 	// Evaluating a symbol returns its value in the scope
 	val := sc.Resolve(sym)
 	if val == Nil {
-		return sym,nil
+		return nil, errors.New(fmt.Sprintf("Symbol not defined: %s", sym.String()))
 	} else {
 		return val,nil
 	}

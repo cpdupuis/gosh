@@ -17,12 +17,3 @@ type Value interface {
 	Eval(sc *Scope, ec *EvalContext) (Value,error)
 }
 
-type EvalContextFrame struct {
-	CurrentLocation int
-	ShouldEvalLocation func(int)
-}
-
-type EvalContext struct {
-	Frames []*EvalContextFrame
-}
-
