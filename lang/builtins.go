@@ -5,12 +5,12 @@ import (
 	"fmt"
 )
 
-func CreateBuiltin(paramNames []string, builtinFunc func(*Scope,[]*Symbol)(Value,error)) *Lambda{
+func CreateBuiltin(paramNames []string, builtinFunc func(*Scope,[]*Symbol)(Value,error), form Form) *Lambda{
 	syms := make([]*Symbol, len(paramNames))
 	for i,paramName := range(paramNames) {
 		syms[i] = &Symbol{Sym:paramName}
 	}
-	return &Lambda{ParamSyms: syms, Body: Nil, BuiltinFunc: builtinFunc}
+	return &Lambda{ParamSyms: syms, Body: Nil, BuiltinFunc: builtinFunc, Form: form}
 }
 
 func BuiltinPlus(scope *Scope, paramSyms []*Symbol) (Value,error) {

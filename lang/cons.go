@@ -2,6 +2,7 @@ package lang
 
 import (
 	"strings"
+	"errors"
 )
 
 type Cons struct {
@@ -43,9 +44,12 @@ func (cons *Cons) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 		return Nil,err
 	}
 	if lambda,ok := firstVal.(*Lambda); ok {
-		return lambda.Call(sc, ec, cons.Rest)
+		ec.Push(lambda.Form)
+		retval,err := lambda.Call(sc, ec, cons.Rest)
+		ec.Pop()
+		return retval,err
 	} else {
-		return cons,nil
+		return Nil,errors.New("Can't eval this!")
 	}
 }
 

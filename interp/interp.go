@@ -11,6 +11,7 @@ func repl(treeCh chan lang.Value) {
 	for {
 		tree := <-treeCh
 		ctx := &lang.EvalContext{}
+		ctx.Push(lang.StandardForm)
 		fmt.Printf("Tree: <%+v>\n", tree)
 		res,err := tree.Eval(env.Root, ctx)
 		if err != nil {

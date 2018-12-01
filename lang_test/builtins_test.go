@@ -7,11 +7,12 @@ import (
 
 func TestBuiltinPlus(t *testing.T) {
 	paramNames := []string{"foo", "bar"}
-	lambda := lang.CreateBuiltin(paramNames, lang.BuiltinPlus)
+	lambda := lang.CreateBuiltin(paramNames, lang.BuiltinPlus, lang.StandardForm)
 	scope := lang.NewScope(nil)
 	cons := &lang.Cons{First:&lang.Int{Number: 3}, Rest: lang.Nil}
 	cons = &lang.Cons{First:&lang.Int{Number: 5}, Rest: cons}
 	ec := &lang.EvalContext{}
+	ec.Push(lang.StandardForm)
 	res,err := lambda.Call(scope, ec, cons)
 	if err != nil {
 		t.Fail()
@@ -27,9 +28,10 @@ func TestBuiltinPlus(t *testing.T) {
 
 func TestBuiltinCons(t *testing.T) {
 	paramNames := []string{"foo", "bar"}
-	lambda := lang.CreateBuiltin(paramNames, lang.BuiltinCons)
+	lambda := lang.CreateBuiltin(paramNames, lang.BuiltinCons, lang.StandardForm)
 	scope := lang.NewScope(nil)
 	ec := &lang.EvalContext{}
+	ec.Push(lang.StandardForm)
 	cons := &lang.Cons{First:&lang.Int{Number: 3}, Rest: lang.Nil}
 	cons = &lang.Cons{First:&lang.Int{Number: 5}, Rest: cons}
 

@@ -10,6 +10,7 @@ type Lambda struct {
 	ParamSyms []*Symbol
 	Body Value
 	BuiltinFunc func(*Scope,[]*Symbol) (Value,error)
+	Form Form
 }
 
 func (lambda *Lambda) Type() Type {
@@ -46,12 +47,19 @@ func (lambda *Lambda) Call(scope *Scope, ec *EvalContext, params List) (Value,er
 	sc := NewScope(scope)
 	plist := params
 	for _, paramSym := range(lambda.ParamSyms) {
+		ec.Top().MoveNext()
 		cons,ok := plist.(*Cons)
 		if ok {
-			// This is eager evaluation.
-			val,err := cons.First.Eval(sc, nil)
-			if err != nil {
-				return Nil,err
+			var val Value
+			var err error
+			if ec.Top().ShouldEval() {
+				// This is eager evaluation.
+				val,err = cons.First.Eval(sc, nil)
+				if err != nil {
+					return Nil,err
+				}
+			} else {
+				val = cons.First
 			}
 			sc.Define(paramSym, val)
 			plist = cons.Rest

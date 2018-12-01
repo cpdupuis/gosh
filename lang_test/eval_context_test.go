@@ -7,7 +7,7 @@ import (
 
 func TestPush(t *testing.T) {
 	ec := &lang.EvalContext{}
-	ec.Push()
+	ec.Push(lang.StandardForm)
 	if len(ec.Frames) != 1 {
 		t.Fail()
 	}
@@ -15,12 +15,13 @@ func TestPush(t *testing.T) {
 
 func TestPop(t *testing.T) {
 	ec := &lang.EvalContext{}
-	ec.Push()
+	ec.Push(lang.StandardForm)
 	ec.Pop()
 	if len(ec.Frames) != 0 {
 		t.Fail()
 	}
 }
+
 
 func TestPopEmpty(t *testing.T) {
 	ok := false
@@ -39,3 +40,25 @@ func TestPopEmpty(t *testing.T) {
 	}		
 }
 
+func TestPushityPoppityPop(t *testing.T) {
+	ec := &lang.EvalContext{}
+	for i:=0; i<1024; i++ {
+		ec.Push(lang.StandardForm)
+	}
+	for i:=0; i<1024; i++ {
+		ec.Pop()
+	}
+	ok := false
+	func() {
+		defer func() {
+			if rec := recover(); rec != nil {
+				// recovered from panic
+				ok = true
+			}
+		}()
+		ec.Pop()	
+	}()
+	if !ok {
+		t.Fail()
+	}		
+}
