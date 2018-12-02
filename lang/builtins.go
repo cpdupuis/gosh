@@ -9,6 +9,12 @@ func CreateBuiltin(paramNames []string, builtinFunc func(*Scope,[]*Symbol)(Value
 	return &Lambda{ParamSyms: argsyms, Body: Nil, BuiltinFunc: builtinFunc, Form: form}
 }
 
+func DefineQuote(scope *Scope) {
+	paramSyms := []*Symbol{&Symbol{Sym:"a"}}
+	lambda := &Lambda{ParamSyms: paramSyms, Body: paramSyms[0], Form:DefForm}
+	scope.Define(&Symbol{Sym:"quote"}, lambda)
+}
+
 var argnames []string = []string{"one", "two"}
 var argsyms []*Symbol = []*Symbol{&Symbol{Sym:argnames[0]}, &Symbol{Sym:argnames[1]}}
 

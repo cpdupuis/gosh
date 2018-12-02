@@ -9,6 +9,7 @@ func NewEnvironment() *Environment {
 	sc := NewScope(nil)
 	SetupRootScope(sc)
 	DefineIntBinOps(sc)
+	DefineQuote(sc)
 	env.Root = sc
 	return env
 }
