@@ -15,8 +15,8 @@ func NewEnvironment() *Environment {
 }
 
 func SetupRootScope(sc *Scope) {
-	ab := []string {"a", "b"}
-	a := []string{"a"}
+	ab := []*Symbol {Gensym(), Gensym()}
+	a := []*Symbol{Gensym()}
 	cons := CreateBuiltin(ab, BuiltinCons, StandardForm)
 	sc.Define(&Symbol{Sym:"cons"}, cons)
 	def := CreateBuiltin(ab, BuiltinDef, DefForm)

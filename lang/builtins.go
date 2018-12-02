@@ -5,22 +5,17 @@ import (
 	"fmt"
 )
 
-func CreateBuiltin(paramNames []string, builtinFunc func(*Scope,[]*Symbol)(Value,error), form Form) *Lambda{
-	paramSyms := []*Symbol{}
-	for _,paramName := range(paramNames) {
-		paramSyms = append(paramSyms, &Symbol{Sym:paramName})
-	}
+func CreateBuiltin(paramSyms []*Symbol, builtinFunc func(*Scope,[]*Symbol)(Value,error), form Form) *Lambda{
 	return &Lambda{ParamSyms: paramSyms, Body: Nil, BuiltinFunc: builtinFunc, Form: form}
 }
 
 func DefineQuote(scope *Scope) {
-	paramSyms := []*Symbol{&Symbol{Sym:"a"}}
+	paramSyms := []*Symbol{Gensym()}
 	lambda := &Lambda{ParamSyms: paramSyms, Body: paramSyms[0], Form:DefForm}
 	scope.Define(&Symbol{Sym:"quote"}, lambda)
 }
 
-var argnames []string = []string{"one", "two"}
-var argsyms []*Symbol = []*Symbol{&Symbol{Sym:argnames[0]}, &Symbol{Sym:argnames[1]}}
+var argsyms []*Symbol = []*Symbol{Gensym(), Gensym()}
 
 func DefBinOp(scope *Scope, opname string, op func(Value,Value) (Value,error)) {
 	// Define the lambda
@@ -78,9 +73,12 @@ func BuiltinDef(scope *Scope, paramSyms []*Symbol) (Value,error) {
 	if len(paramSyms) != 2 {
 		return Nil,errors.New(fmt.Sprintf("Too many args: %d", len(paramSyms)))
 	}
-	val := scope.Resolve(paramSyms[1])
+	fmt.Printf("SCOPE: %+v\n", scope.String())
+	fmt.Printf("ParamSyms: %+v\n", paramSyms)
 	key := scope.Resolve(paramSyms[0])
+	val := scope.Resolve(paramSyms[1])
 	if k,ok := key.(*Symbol); ok {
+		fmt.Printf("DEFINE Key:%+v, Value: %+v\n", k, val)
 		scope.Parent.Define(k, val)
 		return val,nil
 	} else {

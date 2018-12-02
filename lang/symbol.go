@@ -26,3 +26,11 @@ func (sym *Symbol) Eval(sc *Scope, ec *EvalContext) (Value, error) {
 		return val,nil
 	}
 }
+
+var gensymNum int64
+
+func Gensym() *Symbol {
+	// gensyms have a leading space in their name and are globally unique
+	gensymNum++
+	return &Symbol{Sym:fmt.Sprintf(" %d", gensymNum)}
+}
