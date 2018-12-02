@@ -21,8 +21,3 @@ func SetupRootScope(sc *Scope) {
 	def := CreateBuiltin(ab, BuiltinDef, DefForm)
 	sc.Define(&Symbol{Sym:"def"}, def)
 }
-
-// Here are all the functions in the default environment
-func Def(sc *Scope, sym *Symbol, val Value) {
-	sc.Define(sym, val)
-}

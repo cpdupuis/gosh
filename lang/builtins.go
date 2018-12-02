@@ -49,11 +49,8 @@ func BuiltinDef(scope *Scope, paramSyms []*Symbol) (Value,error) {
 	if len(paramSyms) != 2 {
 		return Nil,errors.New(fmt.Sprintf("Too many args: %d", len(paramSyms)))
 	}
-	fmt.Printf("ParamSyms: %+v\n", paramSyms)
-	fmt.Printf("Scope: %s\n", scope.String())
 	val := scope.Resolve(paramSyms[1])
 	key := scope.Resolve(paramSyms[0])
-	fmt.Printf("Key: %+v, Value: %+v\n", key, val)
 	if k,ok := key.(*Symbol); ok {
 		scope.Parent.Define(k, val)
 		return val,nil
