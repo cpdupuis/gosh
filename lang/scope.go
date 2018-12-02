@@ -2,6 +2,7 @@ package lang
 
 import (
 	"errors"
+	"fmt"
 )
 type Scope struct {
 	ScopeTable map[string]Value
@@ -19,7 +20,7 @@ func (scope *Scope) Type() Type {
 }
 
 func (scope *Scope) String() string {
-	return "Scope"
+	return fmt.Sprintf("ScopeTable: %+v", scope.ScopeTable)
 }
 func (scope *Scope) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 	// You can't evaluate a scope. Sorry.
@@ -33,7 +34,7 @@ func (scope *Scope) Resolve(sym *Symbol) Value {
 			return val
 		}
 	}
-	return Nil
+	return nil
 }
 
 func (scope *Scope) Define(sym *Symbol, val Value) {

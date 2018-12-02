@@ -5,15 +5,16 @@ import (
 	"github.com/cpdupuis/gosh/lang"
 )
 
+
 func TestBuiltinPlus(t *testing.T) {
-	paramNames := []string{"foo", "bar"}
-	lambda := lang.CreateBuiltin(paramNames, lang.BuiltinPlus, lang.StandardForm)
 	scope := lang.NewScope(nil)
+	lang.DefineIntBinOps(scope)
 	cons := &lang.Cons{First:&lang.Int{Number: 3}, Rest: lang.Nil}
 	cons = &lang.Cons{First:&lang.Int{Number: 5}, Rest: cons}
+	cons = &lang.Cons{First:&lang.Symbol{Sym:"+"}, Rest: cons}
 	ec := &lang.EvalContext{}
 	ec.Push(lang.StandardForm)
-	res,err := lambda.Call(scope, ec, cons)
+	res,err := cons.Eval(scope, ec)
 	if err != nil {
 		t.Fail()
 	}

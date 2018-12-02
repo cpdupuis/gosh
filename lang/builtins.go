@@ -6,26 +6,45 @@ import (
 )
 
 func CreateBuiltin(paramNames []string, builtinFunc func(*Scope,[]*Symbol)(Value,error), form Form) *Lambda{
-	syms := make([]*Symbol, len(paramNames))
-	for i,paramName := range(paramNames) {
-		syms[i] = &Symbol{Sym:paramName}
-	}
-	return &Lambda{ParamSyms: syms, Body: Nil, BuiltinFunc: builtinFunc, Form: form}
+	return &Lambda{ParamSyms: argsyms, Body: Nil, BuiltinFunc: builtinFunc, Form: form}
 }
 
-func BuiltinPlus(scope *Scope, paramSyms []*Symbol) (Value,error) {
-	var res int64
-	for _, paramSym := range(paramSyms) {
-		val := scope.Resolve(paramSym)
-		num,ok := val.(*Int)
-		if ok {
-			res += num.Number
-		} else {
-			return Nil, errors.New(fmt.Sprintf("Not a number: %v", val))
-		}
+var argnames []string = []string{"one", "two"}
+var argsyms []*Symbol = []*Symbol{&Symbol{Sym:argnames[0]}, &Symbol{Sym:argnames[1]}}
+
+func DefBinOp(scope *Scope, opname string, op func(Value,Value) (Value,error)) {
+	// Define the lambda
+	builtInFunc := func(sc *Scope, paramSyms []*Symbol) (Value,error) {
+		arg0 := sc.Resolve(paramSyms[0])
+		arg1 := sc.Resolve(paramSyms[1])
+		return op(arg0, arg1)
 	}
-	retval := &Int{Number:res}
-	return retval,nil
+	lambda := &Lambda{ParamSyms:argsyms, Body: Nil, BuiltinFunc: builtInFunc, Form: StandardForm}
+	// Register its definition with the scope
+	scope.Define(&Symbol{Sym:opname}, lambda)
+}
+
+func generateIntBinOp(numfunc func(int64,int64)int64) func(Value,Value) (Value,error)  {
+	return func(arg0 Value, arg1 Value) (Value,error) {
+		num0, ok := arg0.(*Int)
+		if !ok {
+			return nil,errors.New(fmt.Sprintf("Not a number: %v", arg0))
+		}
+		num1, ok := arg1.(*Int)
+		if !ok {
+			return nil,errors.New(fmt.Sprintf("Not a number: %v", arg1))
+		}
+		result := numfunc(num0.Number,num1.Number)
+		return &Int{Number:result},nil
+	}
+}
+
+func DefineIntBinOps(sc *Scope) {
+	DefBinOp(sc, "+", generateIntBinOp(func(a int64, b int64)int64 { return a + b}))
+	DefBinOp(sc, "-", generateIntBinOp(func(a int64, b int64)int64 { return a - b}))
+	DefBinOp(sc, "*", generateIntBinOp(func(a int64, b int64)int64 { return a * b}))
+	DefBinOp(sc, "/", generateIntBinOp(func(a int64, b int64)int64 { return a / b}))
+	DefBinOp(sc, "%", generateIntBinOp(func(a int64, b int64)int64 { return a % b}))	
 }
 
 func BuiltinCons(scope *Scope, paramSyms []*Symbol) (Value,error) {
