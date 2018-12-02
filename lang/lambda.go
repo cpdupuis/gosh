@@ -42,7 +42,7 @@ func (lambda *Lambda) Arity() int {
 func (lambda *Lambda) Call(scope *Scope, ec *EvalContext, params List) (Value,error) {
 		// OK, so someone wants to call this function with some parameters. Cool. Let's make it happen.
 	if params.Length() != lambda.Arity() {
-		return Nil,errors.New("Inconceivable!")
+		return Nil,errors.New(fmt.Sprintf("Calling a function with the wrong number of args: %d", params.Length()))
 	}
 	sc := NewScope(scope)
 	plist := params

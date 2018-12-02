@@ -25,33 +25,3 @@ func TestBuiltinPlus(t *testing.T) {
 		t.Fail()
 	}
 }
-
-func TestBuiltinCons(t *testing.T) {
-	paramNames := []string{"foo", "bar"}
-	lambda := lang.CreateBuiltin(paramNames, lang.BuiltinCons, lang.StandardForm)
-	scope := lang.NewScope(nil)
-	scope.Define(&lang.Symbol{Sym:"cons"}, lambda)
-	ec := &lang.EvalContext{}
-	ec.Push(lang.StandardForm)
-	cons := &lang.Cons{First:&lang.Int{Number: 3}, Rest: lang.Nil}
-	cons = &lang.Cons{First:&lang.Int{Number: 5}, Rest: cons}
-	cons = &lang.Cons{First:&lang.Symbol{Sym:"cons"}, Rest: cons}
-
-	seven := &lang.Int{Number: 7}
-
-	consArgs := &lang.Cons{First:cons, Rest: lang.Nil}
-	consArgs = &lang.Cons{First:seven, Rest: consArgs}
-
-	res,err := lambda.Call(scope, ec, consArgs)
-	if err != nil {
-		t.Errorf("Failed: %s", err.Error())
-	}
-	if c,ok := res.(*lang.Cons); ok {
-		str := c.String()
-		if str != "( 7 5 3 )" {
-			t.Errorf("Wrong list: %+v", str)
-		}
-	} else {
-		t.Errorf("Res is not cons: %+v", res)
-	}
-}

@@ -41,7 +41,7 @@ func TestLambdaInvalidParams(t *testing.T) {
 	if res != lang.Nil {
 		t.Fail()
 	}
-	if err.Error() != "Inconceivable!" {
+	if err.Error() != "Calling a function with the wrong number of args: 0" {
 		t.Errorf("Wrong error: %v", err.Error())
 	}
 }
