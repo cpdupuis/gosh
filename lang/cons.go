@@ -3,6 +3,7 @@ package lang
 import (
 	"strings"
 	"errors"
+	"fmt"
 )
 
 type Cons struct {
@@ -49,7 +50,7 @@ func (cons *Cons) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 		ec.Pop()
 		return retval,err
 	} else {
-		return Nil,errors.New("Can't eval this!")
+		return Nil,errors.New(fmt.Sprintf("Can't eval this: %+v", cons))
 	}
 }
 

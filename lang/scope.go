@@ -1,5 +1,8 @@
 package lang
 
+import (
+	"errors"
+)
 type Scope struct {
 	ScopeTable map[string]Value
 	Parent *Scope
@@ -20,7 +23,7 @@ func (scope *Scope) String() string {
 }
 func (scope *Scope) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 	// You can't evaluate a scope. Sorry.
-	return Nil,nil
+	return Nil,errors.New("Can't eval a scope")
 }
 
 func (scope *Scope) Resolve(sym *Symbol) Value {

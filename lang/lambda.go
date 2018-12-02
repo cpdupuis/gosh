@@ -32,7 +32,7 @@ func (lambda *Lambda) String() string {
 
 func (lambda *Lambda) Eval(scope *Scope, ec *EvalContext) (Value,error) {
 	// Evaluating a lambda just returns the lambda, I guess. Or maybe it should call it with no args? Seems odd.
-	return nil,errors.New("Can't eval a lambda")
+	return Nil,errors.New("Can't eval a lambda")
 }
 
 func (lambda *Lambda) Arity() int {
@@ -54,7 +54,7 @@ func (lambda *Lambda) Call(scope *Scope, ec *EvalContext, params List) (Value,er
 			var err error
 			if ec.Top().ShouldEval() {
 				// This is eager evaluation.
-				val,err = cons.First.Eval(sc, nil)
+				val,err = cons.First.Eval(sc, ec)
 				if err != nil {
 					return Nil,err
 				}
