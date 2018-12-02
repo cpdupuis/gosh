@@ -6,7 +6,11 @@ import (
 )
 
 func CreateBuiltin(paramNames []string, builtinFunc func(*Scope,[]*Symbol)(Value,error), form Form) *Lambda{
-	return &Lambda{ParamSyms: argsyms, Body: Nil, BuiltinFunc: builtinFunc, Form: form}
+	paramSyms := []*Symbol{}
+	for _,paramName := range(paramNames) {
+		paramSyms = append(paramSyms, &Symbol{Sym:paramName})
+	}
+	return &Lambda{ParamSyms: paramSyms, Body: Nil, BuiltinFunc: builtinFunc, Form: form}
 }
 
 func DefineQuote(scope *Scope) {
@@ -84,3 +88,24 @@ func BuiltinDef(scope *Scope, paramSyms []*Symbol) (Value,error) {
 	}
 }
 
+func BuiltinQuote(scope *Scope, paramSyms []*Symbol) (Value,error) {
+	if len(paramSyms) != 1 {
+		return nil,errors.New(fmt.Sprintf("Wrong number of args: %d", len(paramSyms)))
+	}
+	val := scope.Resolve(paramSyms[0])
+	return val,nil
+}
+
+func BuiltinEval(scope *Scope, paramSyms []*Symbol) (Value,error) {
+	if len(paramSyms) != 1 {
+		return nil,errors.New(fmt.Sprintf("Wrong number of args: %d", len(paramSyms)))
+	}
+	val := scope.Resolve(paramSyms[0])
+	ec := &EvalContext{}
+	
+	once,err := val.Eval(scope, ec)
+	if err != nil {
+		return nil,err
+	}
+	return once,nil
+}
