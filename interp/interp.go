@@ -6,20 +6,27 @@ import (
 	"github.com/cpdupuis/gosh/lang"
 )
 
+
+func ReplOne(tree lang.Value, env *lang.Environment) (lang.Value,error) {
+	ctx := &lang.EvalContext{}
+	ctx.Push(lang.StandardForm)
+	fmt.Printf("Tree: <%+v>\n", tree)
+	res,err := tree.Eval(env.Root, ctx)
+	ctx.Pop()
+	return res,err
+}
+
 func repl(treeCh chan lang.Value) {
 	env := lang.NewEnvironment()
 	for {
 		tree := <-treeCh
-		ctx := &lang.EvalContext{}
-		ctx.Push(lang.StandardForm)
-		fmt.Printf("Tree: <%+v>\n", tree)
-		res,err := tree.Eval(env.Root, ctx)
+		res,err := ReplOne(tree, env)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err.Error())
 		} else {
 			fmt.Printf("Result: %+v\n", res)
 		}
-	}
+		}
 }
 
 

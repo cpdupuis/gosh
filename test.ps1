@@ -1,1 +1,1 @@
-go test github.com/cpdupuis/gosh/lang_test
+go test ./lang_test ./interp_test
