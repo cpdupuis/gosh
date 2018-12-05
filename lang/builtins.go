@@ -73,12 +73,9 @@ func BuiltinDef(scope *Scope, paramSyms []*Symbol) (Value,error) {
 	if len(paramSyms) != 2 {
 		return Nil,errors.New(fmt.Sprintf("Too many args: %d", len(paramSyms)))
 	}
-	fmt.Printf("SCOPE: %+v\n", scope.String())
-	fmt.Printf("ParamSyms: %+v\n", paramSyms)
 	key := scope.Resolve(paramSyms[0])
 	val := scope.Resolve(paramSyms[1])
 	if k,ok := key.(*Symbol); ok {
-		fmt.Printf("DEFINE Key:%+v, Value: %+v\n", k, val)
 		scope.Parent.Define(k, val)
 		return val,nil
 	} else {
@@ -106,4 +103,15 @@ func BuiltinEval(scope *Scope, paramSyms []*Symbol) (Value,error) {
 		return nil,err
 	}
 	return once,nil
+}
+
+func BuiltinLambda(scope *Scope, paramSyms []*Symbol) (Value, error) {
+	argslist := scope.Resolve(paramSyms[0])
+	if _,ok := argslist.(*Cons); ok {
+		body := scope.Resolve(paramSyms[1])
+		lambda := &Lambda{ParamSyms:paramSyms, Body:body, Form:LambdaForm}
+		return lambda,nil		
+	} else {
+		return nil,errors.New(fmt.Sprint("Not a symbol slice: ",argslist))
+	}
 }

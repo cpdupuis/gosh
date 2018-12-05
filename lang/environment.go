@@ -25,4 +25,6 @@ func SetupRootScope(sc *Scope) {
 	sc.Define(&Symbol{Sym:"eval"}, eval)
 	quote := CreateBuiltin(a, BuiltinQuote, DefForm)
 	sc.Define(&Symbol{Sym:"quote"}, quote)
+	lambda := CreateBuiltin(ab, BuiltinLambda, LambdaForm)
+	sc.Define(&Symbol{Sym:"lambda"}, lambda)
 }
