@@ -14,6 +14,7 @@ type Form int
 const (
 	StandardForm = iota
 	DefForm
+	LambdaForm
 )
 
 func StandardFormFunc(position int) bool {
@@ -26,6 +27,10 @@ func DefFormFunc(position int) bool {
 	} else {
 		return true
 	}
+}
+
+func LambdaFormFunc(position int) bool {
+	return false
 }
 
 func GetFormFunc(form Form) func(int)bool {
