@@ -7,9 +7,9 @@ import (
 )
 
 func TestInterpAddition(t *testing.T) {
-	cmd := &lang.Cons{First:&lang.Int{Number:11}, Rest:lang.Nil}
-	cmd = &lang.Cons{First:&lang.Int{Number: 88}, Rest:cmd}
-	cmd = &lang.Cons{First:&lang.Symbol{Sym:"+"}, Rest: cmd}
+	cmd := &lang.Cons{Car:&lang.Int{Number:11}, Cdr:lang.Nil}
+	cmd = &lang.Cons{Car:&lang.Int{Number: 88}, Cdr:cmd}
+	cmd = &lang.Cons{Car:&lang.Symbol{Sym:"+"}, Cdr: cmd}
 
 	env := lang.NewEnvironment()
 	res,err := interp.ReplOne(cmd, env)
@@ -26,9 +26,9 @@ func TestInterpAddition(t *testing.T) {
 }
 
 func TestInterpDefQuoteEval(t *testing.T) {
-	cmd1 := &lang.Cons{First:&lang.Int{Number:8675309}, Rest:lang.Nil}
-	cmd1 = &lang.Cons{First:&lang.Symbol{Sym:"a"}, Rest:cmd1}
-	cmd1 = &lang.Cons{First:&lang.Symbol{Sym:"def"}, Rest:cmd1}
+	cmd1 := &lang.Cons{Car:&lang.Int{Number:8675309}, Cdr:lang.Nil}
+	cmd1 = &lang.Cons{Car:&lang.Symbol{Sym:"a"}, Cdr:cmd1}
+	cmd1 = &lang.Cons{Car:&lang.Symbol{Sym:"def"}, Cdr:cmd1}
 	if cmd1.String() != "( def a 8675309 )" {
 		t.Fail()
 	}
@@ -44,11 +44,11 @@ func TestInterpDefQuoteEval(t *testing.T) {
 	} else {
 		t.Fail()
 	}
-	cmd2 := &lang.Cons{First:&lang.Symbol{Sym:"a"}, Rest:lang.Nil}
-	cmd2 = &lang.Cons{First:&lang.Symbol{Sym:"quote"}, Rest: cmd2}
-	cmd2 = &lang.Cons{First:cmd2, Rest:lang.Nil}
-	cmd2 = &lang.Cons{First:&lang.Symbol{Sym:"b"}, Rest: cmd2}
-	cmd2 = &lang.Cons{First: &lang.Symbol{Sym:"def"}, Rest: cmd2}
+	cmd2 := &lang.Cons{Car:&lang.Symbol{Sym:"a"}, Cdr:lang.Nil}
+	cmd2 = &lang.Cons{Car:&lang.Symbol{Sym:"quote"}, Cdr: cmd2}
+	cmd2 = &lang.Cons{Car:cmd2, Cdr:lang.Nil}
+	cmd2 = &lang.Cons{Car:&lang.Symbol{Sym:"b"}, Cdr: cmd2}
+	cmd2 = &lang.Cons{Car: &lang.Symbol{Sym:"def"}, Cdr: cmd2}
 	if cmd2.String() != "( def b ( quote a ) )" {
 		t.Fail()
 	}
@@ -63,8 +63,8 @@ func TestInterpDefQuoteEval(t *testing.T) {
 			t.Fail()
 		}
 	}
-	cmd3 := &lang.Cons{First:&lang.Symbol{Sym:"b"}, Rest:lang.Nil}
-	cmd3 = &lang.Cons{First:&lang.Symbol{Sym:"eval"}, Rest:cmd3}
+	cmd3 := &lang.Cons{Car:&lang.Symbol{Sym:"b"}, Cdr:lang.Nil}
+	cmd3 = &lang.Cons{Car:&lang.Symbol{Sym:"eval"}, Cdr:cmd3}
 	val,err := interp.ReplOne(cmd3, env)
 	if err != nil {
 		t.Fail()

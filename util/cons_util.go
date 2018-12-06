@@ -4,8 +4,8 @@ import (
 	"github.com/cpdupuis/gosh/lang"
 )
 
-func consToSliceHelper(cons *lang.Cons, res []lang.Value) []lang.Value {
-	res = append(res, cons.First)
+func listToSliceHelper(list lang.List, res []lang.Value) []lang.Value {
+	res = append(res, list.First)
 	// This only works if lists are only cons or nil
 	if c,ok := cons.Rest.(*lang.Cons); ok {
 		return consToSliceHelper(c, res)
@@ -14,7 +14,8 @@ func consToSliceHelper(cons *lang.Cons, res []lang.Value) []lang.Value {
 	}
 }
 
-func ConsToSlice(cons *lang.Cons) []lang.Value {
+func ListToSlice(list lang.List) []lang.Value {
 	var res []lang.Value
-	return consToSliceHelper(cons, res)
+	return listToSliceHelper(list, res)
 }
+

@@ -14,7 +14,7 @@ func TestLengthNull(t *testing.T) {
 
 func TestLength1(t *testing.T) {
 	sym := &lang.Symbol{Sym:"hi"}
-	cons := &lang.Cons{First:sym, Rest:lang.Nil}
+	cons := &lang.Cons{Car:sym, Cdr:lang.Nil}
 	length:= cons.Length()
 	if length != 1 {
 		t.Fail()
@@ -23,10 +23,10 @@ func TestLength1(t *testing.T) {
 
 func TestLength4(t *testing.T) {
 	sym := &lang.Symbol{Sym:"hi"}
-	cons4 := &lang.Cons{First:sym, Rest:lang.Nil}
-	cons3 := &lang.Cons{First:sym, Rest:cons4}
-	cons2 := &lang.Cons{First:sym, Rest:cons3}
-	cons1 := &lang.Cons{First:sym, Rest:cons2}
+	cons4 := &lang.Cons{Car:sym, Cdr:lang.Nil}
+	cons3 := &lang.Cons{Car:sym, Cdr:cons4}
+	cons2 := &lang.Cons{Car:sym, Cdr:cons3}
+	cons1 := &lang.Cons{Car:sym, Cdr:cons2}
 	length:= cons1.Length()
 	if length != 4 {
 		t.Fail()

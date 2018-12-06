@@ -2,6 +2,15 @@ package lang
 
 type null struct {
 }
+
+func (nul *null) First() Value {
+	panic("Don't do that")
+}
+
+func (nul *null) Rest() List {
+	return Nil
+}
+
 func (nul *null) Type() Type {
 	return NullType
 }

@@ -1,6 +1,8 @@
 package lang
 
 type List interface {
+	First() Value
+	Rest() List
 	Type() Type
 	String() string
 	Eval(sc *Scope, ec *EvalContext) (Value,error)

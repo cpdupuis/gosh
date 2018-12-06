@@ -29,15 +29,15 @@ func ParseSExp(inCh chan string) (Value, ParseStatus) {
 			item,status := ParseSExp(inCh)
 			fmt.Printf("Here is item: %v\n", item)
 			if status == CloseSExp {
-				curr.Rest = Nil
+				curr.Cdr = Nil
 				return res, OK
 			} else {
-				newcons := &Cons{First:item}
+				newcons := &Cons{Car:item}
 				if res == nil {
 					res = newcons
 					curr = newcons
 				} else {
-					curr.Rest = newcons
+					curr.Cdr = newcons
 					curr = newcons
 				}
 			}

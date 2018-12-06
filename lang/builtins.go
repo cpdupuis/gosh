@@ -60,7 +60,7 @@ func BuiltinCons(scope *Scope, paramSyms []*Symbol) (Value,error) {
 	r := scope.Resolve(paramSyms[1])
 	if first,ok := f.(Value); ok {
 		if rest,ok := r.(List); ok {
-			return &Cons{First:first, Rest:rest}, nil
+			return &Cons{Car:first, Cdr:rest}, nil
 		} else {
 			return Nil,errors.New(fmt.Sprintf("Invalid rest: %+v", r))
 		}

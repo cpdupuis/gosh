@@ -58,9 +58,9 @@ func TestLambdaSimpleFunc(t *testing.T) {
 	num1 := &lang.Int{Number: 42}
 	num2 := &lang.Int{Number:8675309}
 	num3 := &lang.Int{Number:909}
-	cons := &lang.Cons{First: num3, Rest: lang.Nil}
-	cons = &lang.Cons{First:num2, Rest: cons}
-	cons = &lang.Cons{First:num1, Rest: cons}
+	cons := &lang.Cons{Car: num3, Cdr: lang.Nil}
+	cons = &lang.Cons{Car:num2, Cdr: cons}
+	cons = &lang.Cons{Car:num1, Cdr: cons}
 	res,err := lambda.Call(scope, ec, cons)
 	if err != nil {
 		t.Fail()

@@ -54,15 +54,15 @@ func (lambda *Lambda) Call(scope *Scope, ec *EvalContext, params List) (Value,er
 			var err error
 			if ec.Top().ShouldEval() {
 				// This is eager evaluation.
-				val,err = cons.First.Eval(sc, ec)
+				val,err = cons.Car.Eval(sc, ec)
 				if err != nil {
 					return Nil,err
 				}
 			} else {
-				val = cons.First
+				val = cons.Car
 			}
 			sc.Define(paramSym, val)
-			plist = cons.Rest
+			plist = cons.Cdr
 		} else {
 			return Nil,errors.New("Malformed list in call!")
 		}

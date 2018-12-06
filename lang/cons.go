@@ -7,8 +7,16 @@ import (
 )
 
 type Cons struct {
-	First Value
-	Rest List
+	Car Value
+	Cdr List
+}
+
+func (cons *Cons) First() Value {
+	return cons.Car
+}
+
+func (cons *Cons) Rest() List {
+	return cons.Cdr
 }
 
 func (cons *Cons) Type() Type {
@@ -18,8 +26,8 @@ func (cons *Cons) Type() Type {
 func (cons *Cons) String() string {
 	strarray := make([]string, 0)
 	strarray = append(strarray, "(")
-	strarray = append(strarray, cons.First.String())
-	curr := cons.Rest
+	strarray = append(strarray, cons.Car.String())
+	curr := cons.Cdr
 
 Loop:	
 	for {
@@ -27,8 +35,8 @@ Loop:
 		case *null:
 			break Loop
 		case *Cons:
-			strarray = append(strarray, item.First.String())
-			curr = item.Rest
+			strarray = append(strarray, item.Car.String())
+			curr = item.Cdr
 		default:
 			panic("Unexpected!")
 		}
@@ -39,14 +47,14 @@ Loop:
 
 func (cons *Cons) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 	// Eval'ing a cons means calling the lambda in the car with the cons in the cdr.
-	first := cons.First
+	first := cons.Car
 	firstVal,err := first.Eval(sc, ec)
 	if err != nil {
 		return Nil,err
 	}
 	if lambda,ok := firstVal.(*Lambda); ok {
 		ec.Push(lambda.Form)
-		retval,err := lambda.Call(sc, ec, cons.Rest)
+		retval,err := lambda.Call(sc, ec, cons.Cdr)
 		ec.Pop()
 		return retval,err
 	} else {
@@ -55,6 +63,6 @@ func (cons *Cons) Eval(sc *Scope, ec *EvalContext) (Value,error) {
 }
 
 func (cons *Cons) Length() int {
-	return 1 + cons.Rest.Length()
+	return 1 + cons.Cdr.Length()
 }
 
