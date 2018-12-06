@@ -58,18 +58,3 @@ func (cons *Cons) Length() int {
 	return 1 + cons.Rest.Length()
 }
 
-
-func (cons *Cons) toSliceHelper(res []Value) []Value {
-	res = append(res, cons.First)
-	// This only works if lists are only cons or nil
-	if c,ok := cons.Rest.(*Cons); ok {
-		return c.toSliceHelper(res)
-	} else {
-		return res
-	}
-}
-
-func (cons *Cons) ToSlice() []Value {
-	var res []Value
-	return cons.toSliceHelper(res)
-}
