@@ -10,11 +10,11 @@ func TestConsToSlice(t *testing.T) {
 	hello := &lang.String{Str: "Hello"}
 	world := &lang.String{Str: "world"}
 	num := &lang.Int{Number: 123}
-	a := &lang.Cons{First: world, Rest: lang.Nil}
-	b := &lang.Cons{First: hello, Rest: a}
-	c := &lang.Cons{First: num, Rest: b}
+	a := &lang.Cons{Car: world, Cdr: lang.Nil}
+	b := &lang.Cons{Car: hello, Cdr: a}
+	c := &lang.Cons{Car: num, Cdr: b}
 
-	res := util.ConsToSlice(c)
+	res := util.ListToSlice(c)
 	if res[0].String() != "123" {
 		t.Fail()
 	}

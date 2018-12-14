@@ -1,6 +1,6 @@
-package lang_test
+package interp_test
 import (
-	"github.com/cpdupuis/gosh/lang"
+	"github.com/cpdupuis/gosh/interp"
 	"strings"
 	"testing"
 )
@@ -8,7 +8,7 @@ import (
 func TestSomeTokens(t *testing.T) {
 	reader := strings.NewReader("The rain (in Spain)  stays \n((mainly)) \"on the plain.\"")
 	ch := make(chan string, 256)
-	go lang.Tokenize(reader, ch)
+	go interp.Tokenize(reader, ch)
 	if <-ch != "The" {
 		t.Fail()
 	}

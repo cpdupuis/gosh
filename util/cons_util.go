@@ -5,10 +5,10 @@ import (
 )
 
 func listToSliceHelper(list lang.List, res []lang.Value) []lang.Value {
-	res = append(res, list.First)
+	res = append(res, list.First())
 	// This only works if lists are only cons or nil
-	if c,ok := cons.Rest.(*lang.Cons); ok {
-		return consToSliceHelper(c, res)
+	if c,ok := list.Rest().(*lang.Cons); ok {
+		return listToSliceHelper(c, res)
 	} else {
 		return res
 	}

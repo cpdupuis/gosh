@@ -1,10 +1,11 @@
-package lang
+package interp
 
 import (
 	"regexp"
 	"fmt"
 	"strconv"
 	"strings"
+	"github.com/cpdupuis/gosh/lang"
 )
 
 type ParseStatus int
@@ -13,26 +14,26 @@ const (
 	CloseSExp
 )
 
-func ParseSExp(inCh chan string) (Value, ParseStatus) {
+func ParseSExp(inCh chan string) (lang.Value, ParseStatus) {
 	next := <-inCh
 	if next == "null" {
-		return Nil,OK
+		return lang.Nil,OK
 	}
 	if next == ")" {
-		return Nil,CloseSExp
+		return lang.Nil,CloseSExp
 	}
 	if (next == "(") {
 		// We're going to build a list until the closing )
-		var res *Cons
-		var curr *Cons
+		var res *lang.Cons
+		var curr *lang.Cons
 		for {
 			item,status := ParseSExp(inCh)
 			fmt.Printf("Here is item: %v\n", item)
 			if status == CloseSExp {
-				curr.Cdr = Nil
+				curr.Cdr = lang.Nil
 				return res, OK
 			} else {
-				newcons := &Cons{Car:item}
+				newcons := &lang.Cons{Car:item}
 				if res == nil {
 					res = newcons
 					curr = newcons
@@ -46,13 +47,13 @@ func ParseSExp(inCh chan string) (Value, ParseStatus) {
 	intVal, err := strconv.ParseInt(next, 10, 64)
 	if err == nil {
 		// It's an int!
-		return &Int{Number: intVal}, OK
+		return &lang.Int{Number: intVal}, OK
 	}
 	match, err := regexp.MatchString("^\".*\"$", next)
 	if match {
-		return &String{Str: strings.Trim(next, "\"")}, OK
+		return &lang.String{Str: strings.Trim(next, "\"")}, OK
 	}
 
 	// Oh hey, maybe this is a symbol. Yeah, let's call it a symbol.
-	return &Symbol{Sym: next}, OK
+	return &lang.Symbol{Sym: next}, OK
 }

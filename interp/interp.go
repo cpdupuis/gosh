@@ -32,7 +32,7 @@ func repl(treeCh chan lang.Value) {
 
 func treeize(inCh chan string, outCh chan lang.Value) lang.Value {
 	for {
-		sexp,_ := lang.ParseSExp(inCh)
+		sexp,_ := ParseSExp(inCh)
 		outCh <- sexp
 	}
 }
@@ -40,7 +40,7 @@ func treeize(inCh chan string, outCh chan lang.Value) lang.Value {
 func Interp() {
 	tokenCh := make(chan string, 256)
 	treeCh := make(chan lang.Value, 256)
-	go lang.Tokenize(os.Stdin, tokenCh)
+	go Tokenize(os.Stdin, tokenCh)
 	go treeize(tokenCh, treeCh)
 	repl(treeCh)
 }

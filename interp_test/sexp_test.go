@@ -1,7 +1,7 @@
-package lang_test
+package interp_test
 
 import (
-	"github.com/cpdupuis/gosh/lang"
+	"github.com/cpdupuis/gosh/interp"
 	"testing"
 )
 
@@ -19,8 +19,8 @@ func TestParseTree(t *testing.T) {
 		inCh <- ")"
 		inCh <- "Nope" // Expect this to be ignored since it's not in the current s-expression
 	}()
-	val, status := lang.ParseSExp(inCh)
-	if status != lang.OK {
+	val, status := interp.ParseSExp(inCh)
+	if status != interp.OK {
 		t.Fail()
 	}
 	valStr := val.String()
